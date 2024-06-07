@@ -1,4 +1,4 @@
-<b> React Form App</b> </br>
+<h1><b> React Form App</b></h1>h1>< </br>
 This project consists of a form divided into 3 steps:
 
 Step 1: Users are required to input their name, surname, and optionally their date of birth. I perform checks on the characters of the name and surname, as well as the validity of the date of birth.
@@ -13,5 +13,5 @@ I use mock promises to validate the fields; incorrect entries prevent users from
 To run the project locally:
 
 Clone the repository.
-Install dependencies with npm install.
-Start the project with npm start.
+Install dependencies with <b>npm install</b>.
+Start the project with <b>npm start</b>.
