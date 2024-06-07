@@ -13,7 +13,7 @@ The form is designed to be responsive and adjusts seamlessly to fit various scre
 
 I've customized the theme of Material-UI and integrated Tailwind CSS classes for styling, creating a visually appealing and consistent user interface.
 
-You can test the application yourself <a href="https://stackblitz.com/~/github.com/agneseMarchionneschi/react-form-app">here<a/>.
+You can test the application yourself <a href="https://stackblitz.com/~/github.com/agneseMarchionneschi/react-form-app">here</a>.
 ### Local Setup
 To run the project locally:
 
