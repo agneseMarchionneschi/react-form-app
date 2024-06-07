@@ -14,6 +14,6 @@ I use mock promises to validate the fields; incorrect entries prevent users from
 ### Local Setup
 To run the project locally:
 
-Clone the repository.
-Install dependencies with <b> `npm install`</b> </br>
-Run in the project director <b> `npm start` </b> 
+- Clone the repository </br>
+- Install dependencies with <b> `npm install`</b> </br>
+- Run in the project director <b> `npm start` </b> 
