@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box,
     Button,
@@ -11,7 +11,7 @@ import {
     StepContent,
     Alert
 } from '@mui/material';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Step1 from './step-1';
 import Step2 from './step-2';
 import Step3 from './step-3';
@@ -54,11 +54,11 @@ const Form: React.FC = () => {
         const updateNextStep = () => {
             let nextDisabled = false;
             if (activeStep === 0) {
-                nextDisabled = !formData.name || !formData.surname;
+                nextDisabled = !formData.name || !formData.surname || !!formErrors.nameError || !!formErrors.surnameError || !!formErrors.dobError;
             } else if (activeStep === 1) {
-                nextDisabled = !formData.email || !formData.password;
+                nextDisabled = !formData.email || !formData.password || !!formErrors.emailError || !!formErrors.passwordError;
             } else if (activeStep === 2) {
-                nextDisabled = !formData.flower || !!formErrors.dobError;
+                nextDisabled = !formData.flower || !!formErrors.flowerError;
             }
             setIsNextDisabled(nextDisabled);
         };
@@ -71,38 +71,49 @@ const Form: React.FC = () => {
 
         let valid = true;
         let errors: string[] = [];
-        const newFormErrors = {...formErrors};
+        const newFormErrors = { ...formErrors };
 
-        if (activeStep === 0) {
-            newFormErrors.nameError = await validateName(formData.name);
-            newFormErrors.surnameError = await validateSurname(formData.surname);
-            newFormErrors.dobError = await validateDateOfBirth(formData.dob);
-            errors = [newFormErrors.nameError, newFormErrors.surnameError, newFormErrors.dobError];
-        } else if (activeStep === 1) {
-            newFormErrors.emailError = await validateEmail(formData.email);
-            newFormErrors.passwordError = await validatePassword(formData.password);
-            errors = [newFormErrors.emailError, newFormErrors.passwordError];
-        } else if (activeStep === 2) {
-            newFormErrors.flowerError = await validateFlower(formData.flower);
-            errors = [newFormErrors.flowerError];
-        }
-
-        valid = !errors.some(error => !!error);
-        setFormErrors(newFormErrors);
-
-        if (valid) {
-            setSubmittedSteps([...submittedSteps, activeStep]);
-            if (activeStep === stepContents.length - 1) {
-                setShowSuccessAlert(true);
-                setTimeout(() => {
-                    navigate('/welcome', {state: formData});
-                }, 1000);
-            } else {
-                setActiveStep(prevActiveStep => prevActiveStep + 1);
+        try {
+            if (activeStep === 0) {
+                const nameValidationResult = await validateName(formData.name);
+                const surnameValidationResult = await validateSurname(formData.surname);
+                const dobValidationResult = await validateDateOfBirth(formData.dob);
+                newFormErrors.nameError = nameValidationResult.valid ? '' : nameValidationResult.message;
+                newFormErrors.surnameError = surnameValidationResult.valid ? '' : surnameValidationResult.message;
+                newFormErrors.dobError = dobValidationResult.valid ? '' : dobValidationResult.message;
+                errors = [newFormErrors.nameError, newFormErrors.surnameError, newFormErrors.dobError];
+            } else if (activeStep === 1) {
+                const emailValidationResult = await validateEmail(formData.email);
+                const passwordValidationResult = await validatePassword(formData.password);
+                newFormErrors.emailError = emailValidationResult.valid ? '' : emailValidationResult.message;
+                newFormErrors.passwordError = passwordValidationResult.valid ? '' : passwordValidationResult.message;
+                errors = [newFormErrors.emailError, newFormErrors.passwordError];
+            } else if (activeStep === 2) {
+                const flowerValidationResult = await validateFlower(formData.flower);
+                newFormErrors.flowerError = flowerValidationResult.valid ? '' : flowerValidationResult.message;
+                errors = [newFormErrors.flowerError];
             }
-        }
 
-        setIsLoading(false);
+            valid = !errors.some(error => !!error);
+            setFormErrors(newFormErrors);
+
+            if (valid) {
+                setSubmittedSteps([...submittedSteps, activeStep]);
+                if (activeStep === stepContents.length - 1) {
+                    setShowSuccessAlert(true);
+                    setTimeout(() => {
+                        navigate('/welcome', { state: formData });
+                        setIsLoading(false); // Imposta isLoading su false dopo la navigazione
+                    }, 200);
+                } else {
+                    setActiveStep(prevActiveStep => prevActiveStep + 1);
+                    setIsLoading(false); // Imposta isLoading su false dopo aver avanzato lo step
+                }
+            }
+        } catch (error) {
+            console.error("Submission error:", error);
+            setIsLoading(false); // Imposta isLoading su false in caso di errore
+        }
     };
 
     const handleBack = () => {
@@ -141,7 +152,7 @@ const Form: React.FC = () => {
 
     return (
         <div className="flex justify-center items-center">
-            <Box className="flex-1" sx={{maxWidth: '600px', margin: '24px', marginBottom: '24px'}}>
+            <Box className="flex-1" sx={{ maxWidth: '600px', margin: '24px', marginBottom: '24px' }}>
                 {isMobile ? (
                     <>
                         {stepContents[activeStep].component}
@@ -177,10 +188,10 @@ const Form: React.FC = () => {
                                 <StepLabel>{step.label}</StepLabel>
                                 <StepContent>
                                     {step.component}
-                                    <Box sx={{textAlign: 'center', mt: 2}}>
+                                    <Box sx={{ textAlign: 'center', mt: 2 }}>
                                         <Button
                                             onClick={handleBack}
-                                            sx={{mr: 1}}
+                                            sx={{ mr: 1 }}
                                             disabled={activeStep === 0}
                                         >
                                             Back

@@ -16,4 +16,4 @@ To run the project locally:
 
 - Clone the repository </br>
 - Install dependencies with <b> `npm install`</b> </br>
-- Run in the project director <b> `npm start` </b> 
+- Run in the project directory <b> `npm start` </b> 
