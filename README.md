@@ -2,15 +2,18 @@
 This project consists of a form divided into 3 steps:
 
 ### Step 1:
-Users are required to input their name, surname, and optionally their date of birth. I perform checks on the characters of the name and surname, as well as the validity of the date of birth.
-
+Users are prompted to enter their name, surname, and optionally their date of birth. I've implemented character checks for the name and surname fields, as well as validation for the date of birth.
 ### Step 2: 
-Users are prompted to input their email and password. Here, I validate that the password is in the correct format.
+In this step, users are asked to provide their email address and choose a password. Password validation ensures that users enter passwords in the correct format.
 
 ### Step 3: 
-Users select their favorite flower from a mock list.
-I use mock promises to validate the fields; incorrect entries prevent users from proceeding. The form is responsive and adjusts to fit the screen, becoming a slider on mobile devices. Upon completion of the form, users land on a welcome page with a summary of the information provided.
+Users are presented with a selection of mock flowers to choose their favorite from.
 
+The form is designed to be responsive and adjusts seamlessly to fit various screen sizes, with a mobile-friendly slider layout for smaller devices.
+
+I've customized the theme of Material-UI and integrated Tailwind CSS classes for styling, creating a visually appealing and consistent user interface.
+
+You can test the application yourself <a href="https://stackblitz.com/~/github.com/agneseMarchionneschi/react-form-app">here<a/>.
 ### Local Setup
 To run the project locally:
 
