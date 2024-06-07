@@ -50,7 +50,6 @@ export const validateDateOfBirth = async (dob: string | null): Promise<string> =
                     resolve('');
                 }
             } else {
-                // Se dob è null, non c'è bisogno di validazione, quindi restituisci una stringa vuota
                 resolve('');
             }
         }, 500);

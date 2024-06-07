@@ -96,7 +96,7 @@ const Form: React.FC = () => {
                 setShowSuccessAlert(true);
                 setTimeout(() => {
                     navigate('/welcome', {state: formData});
-                }, 2000);
+                }, 1000);
             } else {
                 setActiveStep(prevActiveStep => prevActiveStep + 1);
             }
