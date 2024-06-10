@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     Box,
     Button,
@@ -11,7 +11,7 @@ import {
     StepContent,
     Alert
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import Step1 from './step-1';
 import Step2 from './step-2';
 import Step3 from './step-3';
@@ -29,6 +29,7 @@ const Form: React.FC = () => {
     const [isNextDisabled, setIsNextDisabled] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [redirect, setRedirect] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         surname: '',
@@ -51,6 +52,12 @@ const Form: React.FC = () => {
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     useEffect(() => {
+        if (redirect) {
+            navigate('/welcome', {state: formData});
+        }
+    }, [redirect, navigate, formData]);
+
+    useEffect(() => {
         const updateNextStep = () => {
             let nextDisabled = false;
             if (activeStep === 0) {
@@ -68,10 +75,9 @@ const Form: React.FC = () => {
 
     const handleNext = async () => {
         setIsLoading(true);
-
         let valid = true;
         let errors: string[] = [];
-        const newFormErrors = { ...formErrors };
+        const newFormErrors = {...formErrors};
 
         try {
             if (activeStep === 0) {
@@ -101,21 +107,17 @@ const Form: React.FC = () => {
                 setSubmittedSteps([...submittedSteps, activeStep]);
                 if (activeStep === stepContents.length - 1) {
                     setShowSuccessAlert(true);
-                    setTimeout(() => {
-                        navigate('/welcome', { state: formData });
-                        setIsLoading(false); // Imposta isLoading su false dopo la navigazione
-                    }, 200);
+                    setRedirect(true);
                 } else {
                     setActiveStep(prevActiveStep => prevActiveStep + 1);
-                    setIsLoading(false); // Imposta isLoading su false dopo aver avanzato lo step
                 }
             }
         } catch (error) {
             console.error("Submission error:", error);
-            setIsLoading(false); // Imposta isLoading su false in caso di errore
+        } finally {
+            setIsLoading(false);
         }
     };
-
     const handleBack = () => {
         setActiveStep(prevActiveStep => prevActiveStep - 1);
     };
@@ -152,7 +154,7 @@ const Form: React.FC = () => {
 
     return (
         <div className="flex justify-center items-center">
-            <Box className="flex-1" sx={{ maxWidth: '600px', margin: '24px', marginBottom: '24px' }}>
+            <Box className="flex-1" sx={{maxWidth: '600px', margin: '24px', marginBottom: '24px'}}>
                 {isMobile ? (
                     <>
                         {stepContents[activeStep].component}
@@ -188,10 +190,10 @@ const Form: React.FC = () => {
                                 <StepLabel>{step.label}</StepLabel>
                                 <StepContent>
                                     {step.component}
-                                    <Box sx={{ textAlign: 'center', mt: 2 }}>
+                                    <Box sx={{textAlign: 'center', mt: 2}}>
                                         <Button
                                             onClick={handleBack}
-                                            sx={{ mr: 1 }}
+                                            sx={{mr: 1}}
                                             disabled={activeStep === 0}
                                         >
                                             Back
